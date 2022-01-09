@@ -1,4 +1,4 @@
-version = 1.0
+version = 1.01
 
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -39,7 +39,7 @@ def plot_chart(title, ticker, df, subplots, plots, trades):
             fig.add_annotation(x=t.exit_date, y=t.exit_price, text='X'+nt) 
             fig.add_trace(go.Scatter(x=t.stop_plot_x, y=t.stop_plot_y, mode='markers', name='Stop'+nt, marker={'size':4}))
             if t.gain_price>0:
-                fig.add_trace(go.Scatter(x=t.stop_plot_x, y=t.gain_plot_y, mode='markers', name='Gain'+nt, marker={'size':4}, row=1, col=1))    
+                fig.add_trace(go.Scatter(x=t.stop_plot_x, y=t.gain_plot_y, mode='markers', name='Gain'+nt, marker={'size':4}))    
     
     fig.update_layout(xaxis_rangeslider_visible=False)
     fig.show()
