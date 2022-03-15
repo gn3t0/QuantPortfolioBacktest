@@ -1,4 +1,4 @@
-version = 1.0
+version = 1.02
 
 from pyalgotrade import strategy
 from pyalgotrade.barfeed import quandlfeed
@@ -36,8 +36,8 @@ def validate_parameters(stoploss_level_1,stoploss_level_2,stoploss_level_3):
 
 def scenario_filter(filter_scenario_1, filter_scenario_2, filter_scenario_3, filter_scenario_4):
 
-    # if filter_scenario_1 and filter_scenario_2 and ( filter_scenario_3 or filter_scenario_4 ) : return(True) 
-    if filter_scenario_1 and filter_scenario_2 and filter_scenario_3 and filter_scenario_4  : return(True) 
+    if filter_scenario_1 and filter_scenario_2 and ( filter_scenario_3 or filter_scenario_4 ) : return(True) 
+    # if filter_scenario_1 and filter_scenario_2 and filter_scenario_3 and filter_scenario_4  : return(True) 
 
 #-----------------------------------------------------------------------------------------------------------------------
    
@@ -411,7 +411,7 @@ class Strategy(strategy.BacktestingStrategy):
                     if self.__feed.eof()==True and self.__hoje_ibov == hj:
                         self.__lock.acquire()
                         self.__trades_trt.append("%s ENTRADA > %s BUY at $%.2f STOP_in $%.5f VOLUME %.0f %s" % 
-                            (new_trade.entry_signal, self.__ticker, new_trade.entry_risk_ref, stop, self.__df.EMA_Fin[bc], self.__name))
+                            (new_trade.entry_signal, self.__ticker, new_trade.entry_order_price, stop, self.__df.EMA_Fin[bc], self.__name))
                         self.__lock.release()
 
         # PLOT CHART ------------------------------------------------------------------------------

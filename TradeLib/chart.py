@@ -1,4 +1,4 @@
-version = 1.01
+version = 1.02
 
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -9,7 +9,7 @@ def plot_chart(title, ticker, df, subplots, plots, trades):
     n_sp = len(subplots)
     specs=[ [{"rowspan": 3}], [None], [None] ] + (n_sp * [[{}]])
 
-    fig= make_subplots(rows=rows+n_sp,cols=1,specs=specs, print_grid=True)
+    fig= make_subplots(rows=rows+n_sp,cols=1,specs=specs, print_grid=True, shared_xaxes=True)
 
     for item in subplots:
         rows+=1
@@ -18,9 +18,17 @@ def plot_chart(title, ticker, df, subplots, plots, trades):
             fig.add_trace(go.Bar(x=df.index, y=df[item], name=item, marker_color='black', opacity=1),row=rows, col=1)
             fig.update_layout(bargap=0)
         else:
-            fig.add_trace(go.Scatter(x=df.index, y=df[item], name=item, line={"width":1}), row=rows, col=1)
-        
-        fig.update_yaxes(title_text=item, row=rows, col=1)
+            if type(item) is list:
+                title_sub=''
+                for index, i in enumerate(item):
+                    fig.add_trace(go.Scatter(x=df.index, y=df[i], name=i, line={"width":1}), row=rows, col=1)
+                    if index==0: title_sub+=str(i)
+                    else: title_sub+= ' | ' + str(i) 
+                fig.update_yaxes(title_text=title_sub, row=rows, col=1)
+       
+            else:
+                fig.add_trace(go.Scatter(x=df.index, y=df[item], name=item, line={"width":1}), row=rows, col=1)
+                fig.update_yaxes(title_text=item, row=rows, col=1)
 
     fig.add_trace(go.Candlestick(x=df.index, open=df['Open'], high=df['High'], low=df['Low'], close=df['Close'], name='OHLC'))
     
