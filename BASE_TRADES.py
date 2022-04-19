@@ -57,7 +57,7 @@ if __name__ == '__main__':
     # ------------------------------------------------------
 
     stoploss_1 = [4.5]         # 0 -> desabilita    
-    # stoploss_level_1 = [0]     # 1-> 1%
+    # stoploss_level_1 = [0]   
 
     # stoploss_2 = [0]  
     # stoploss_level_2 = [0]

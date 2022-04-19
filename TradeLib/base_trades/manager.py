@@ -1,4 +1,4 @@
-version = 1.0
+version = 1.01
 
 import multiprocessing
 import numpy as np
@@ -180,7 +180,9 @@ def run(input_file_version, multi_proc_batch=4, folder_history_data='BASE_HISTOR
 
         # Validar parametos da estrategia --------------------------------------------------------------------------------------------------
 
-        erro = strategy.validate_parameters(p['stoploss_level_1'],p['stoploss_level_2'],p['stoploss_level_3']) 
+        filters_scenarios = [p['filter_scenario_1'], p['filter_scenario_2'], p['filter_scenario_3'], p['filter_scenario_4']]
+        filters_ohlc = [p['filter_ohlc_1'], p['filter_ohlc_2'], p['filter_ohlc_3'], p['filter_ohlc_4']]
+        erro = strategy.validate_parameters(p['stoploss_level_1'],p['stoploss_level_2'],p['stoploss_level_3'], filters_scenarios, filters_ohlc) 
         if erro != '' : 
             print(erro)
             print(base_trades + " -> NÃO gravado !\n")

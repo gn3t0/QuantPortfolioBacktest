@@ -1,4 +1,4 @@
-version = 1.01
+version = 1.03
 
 import pandas as pd
 import numpy as np
@@ -203,6 +203,8 @@ def run(version_txt, lock, simulation_list, monte_carlo_iterations, filename, fo
                         # 'equity_trades'11, 'equity'12, 'risk'13, 'portfolio_heat'14, 'peak'15, 'under_water'16, 'under_water_%'17, 'open_trades'18, 'profit_loss'19, 'base_trades_i'20, 
                         # 'equity_daily'21, 'peak_daily'22, 'under_water_daily'23, 'under_water_%_daily'24
 
+                        position_risk = round(position_risk,5)
+
                         new_entry = [[d, # 0
                                     trade[0], # 1
                                     trade[1], # 2
@@ -217,7 +219,7 @@ def run(version_txt, lock, simulation_list, monte_carlo_iterations, filename, fo
                                     (equity_trades+position_entry_capital), # 11
                                     df_np[shape_df-1][12]-position_entry_cost-position_entry_slippage, # 12
                                     position_risk, # 13
-                                    round(ph+position_risk,5), # 14
+                                    ph+position_risk, # 14
                                     df_np[shape_df-1][15], # 15
                                     df_np[shape_df-1][16], # 16
                                     round(df_np[shape_df-1][17],5), # 17

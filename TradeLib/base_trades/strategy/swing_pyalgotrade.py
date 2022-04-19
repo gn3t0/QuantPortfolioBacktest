@@ -1,4 +1,4 @@
-version = 1.02
+version = 1.04
 
 from pyalgotrade import strategy
 from pyalgotrade.barfeed import quandlfeed
@@ -24,7 +24,15 @@ version_txt+='\n# ohlc = ' + str(ohlc.version)
 version_txt+='\n# volume = ' + str(volume.version)
 version_txt+='\n# chart = ' + str(chart.version)
 
-def validate_parameters(stoploss_level_1,stoploss_level_2,stoploss_level_3):
+def validate_parameters(stoploss_level_1,stoploss_level_2,stoploss_level_3, filters_scenarios, filters_ohlc ):
+
+    filters_scenarios = [x for x in filters_scenarios if x not in [0,1]]
+    filters_scenarios_count = len(filters_scenarios)
+    if len(set(filters_scenarios))<filters_scenarios_count: return(' duplicated filter_scenario'.strip())
+    
+    filters_ohlc = [x for x in filters_ohlc if x not in [0,1]]
+    filters_ohlc_count = len(filters_ohlc)
+    if len(set(filters_ohlc))<filters_ohlc_count: return(' duplicated filter_ohlc'.strip())
    
     if stoploss_level_1<0 or stoploss_level_2<0 or stoploss_level_3<0: return(' Invalid_StopLoss_Levels'.strip())
     if stoploss_level_2 >0 and stoploss_level_2<=stoploss_level_1: return(' Invalid_StopLoss_Levels'.strip())
@@ -36,8 +44,8 @@ def validate_parameters(stoploss_level_1,stoploss_level_2,stoploss_level_3):
 
 def scenario_filter(filter_scenario_1, filter_scenario_2, filter_scenario_3, filter_scenario_4):
 
-    if filter_scenario_1 and filter_scenario_2 and ( filter_scenario_3 or filter_scenario_4 ) : return(True) 
-    # if filter_scenario_1 and filter_scenario_2 and filter_scenario_3 and filter_scenario_4  : return(True) 
+    # if filter_scenario_1 and filter_scenario_2 and ( filter_scenario_3 or filter_scenario_4 ) : return(True) 
+    if filter_scenario_1 and filter_scenario_2 and filter_scenario_3 and filter_scenario_4  : return(True) 
 
 #-----------------------------------------------------------------------------------------------------------------------
    
@@ -176,15 +184,19 @@ class Strategy(strategy.BacktestingStrategy):
 
         # Calc Breakeven Level
         if self.__breakeven_level>0:
-            trade.breakeven_level_price = trade.entry_price + self.__breakeven_level * (trade.entry_price-trade.initial_stop)
+            # trade.breakeven_level_price = trade.entry_price + self.__breakeven_level * (trade.entry_price-trade.initial_stop)
+            trade.breakeven_level_price = exit.breakeven_calc(trade.entry_price, self.__breakeven_level, trade.initial_stop)
 
         # Calc StopLoss Levels
         if self.__stoploss_1>0:
-            trade.stoploss_level_1_price = trade.entry_price + self.__stoploss_level_1 * (trade.entry_price-trade.initial_stop)
+            # trade.stoploss_level_1_price = trade.entry_price + self.__stoploss_level_1 * (trade.entry_price-trade.initial_stop)
+            trade.stoploss_level_1_price = exit.stoploss_level_calc(trade.entry_price, self.__stoploss_level_1, trade.initial_stop)
         if self.__stoploss_2>0:
-            trade.stoploss_level_2_price = trade.entry_price + self.__stoploss_level_2 * (trade.entry_price-trade.initial_stop)
+            # trade.stoploss_level_2_price = trade.entry_price + self.__stoploss_level_2 * (trade.entry_price-trade.initial_stop)
+            trade.stoploss_level_2_price = exit.stoploss_level_calc(trade.entry_price, self.__stoploss_level_2, trade.initial_stop)
         if self.__stoploss_3>0:
-            trade.stoploss_level_3_price = trade.entry_price + self.__stoploss_level_3 * (trade.entry_price-trade.initial_stop)
+            # trade.stoploss_level_3_price = trade.entry_price + self.__stoploss_level_3 * (trade.entry_price-trade.initial_stop)
+            trade.stoploss_level_3_price = exit.stoploss_level_calc(trade.entry_price, self.__stoploss_level_3, trade.initial_stop)
 
 
     # def onEnterCanceled(self, position):

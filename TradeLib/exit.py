@@ -1,4 +1,4 @@
-version = 1.0
+version = 1.01
 
 MIN_BARS = 21
 
@@ -33,6 +33,24 @@ def trail_stop (df, size, multiple_unit, reference_calc='Close', reference_reset
             i+=1
     
     return(trail)
+
+#--------------------------------------------------------------------------
+
+def breakeven_calc(entry_price, breakeven_level, initial_stop, side='L'):
+
+    if breakeven_level>0 and breakeven_level <=10:
+        return(entry_price + breakeven_level * (entry_price-initial_stop))
+    else: # percentual
+        return( entry_price*(((breakeven_level-10)/100)+1) )
+
+#--------------------------------------------------------------------------
+
+def stoploss_level_calc(entry_price, stoploss_level, initial_stop, side='L'):
+
+    if stoploss_level>0 and stoploss_level <=10:
+        return(entry_price + stoploss_level * (entry_price-initial_stop))
+    else: # percentual
+        return( entry_price*(((stoploss_level-10)/100)+1) )
 
 #--------------------------------------------------------------------------
 
